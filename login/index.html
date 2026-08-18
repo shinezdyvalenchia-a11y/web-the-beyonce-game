@@ -91,19 +91,19 @@
         }
         async function handleLogin() {
             hideError();
-            const inputId = document.getElementById("inputId").value.trim();
-            const inputPw = document.getElementById("inputPw").value.trim();
-            if (!inputId || !inputPw) { showError("⚠️ ID Wota dan Password wajib diisi."); return; }
+            const inputId = (document.getElementById("webId") || document.getElementById("inputId")).value.trim();
+            const inputPw = (document.getElementById("password") || document.getElementById("inputPw")).value.trim();
+            if (!inputId || !inputPw) { showError("⚠️ Telegram User ID dan Password wajib diisi."); return; }
             const btn = document.getElementById("loginBtn");
             btn.disabled = true; btn.textContent = "⏳ Memproses...";
             try {
-                const res = await fetch(BACKEND_URL + '/loginweb', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ web_id: inputId, password: inputPw }) });
+                const res = await fetch(BACKEND_URL + '/loginweb', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ user_id: inputId, web_id: inputId, password: inputPw }) });
                 const data = await res.json();
                 if (res.ok && data.ok === true && data.session_key) {
                     setCookie("user_session", data.session_key, 7);
                     btn.textContent = "✅ Berhasil! Mengalihkan...";
                     setTimeout(() => { window.location.href = './skin/'; }, 500);
-                } else { showError("❌ " + (data.msg || "ID atau Password salah.")); btn.disabled = false; btn.textContent = "Masuk"; }
+                } else { showError("❌ " + (data.msg || "Telegram User ID atau Password salah.")); btn.disabled = false; btn.textContent = "Masuk"; }
             } catch (e) { showError("❌ Gagal menghubungi server. Periksa koneksi internet kamu."); btn.disabled = false; btn.textContent = "Masuk"; }
         }
         document.addEventListener("DOMContentLoaded", () => {
