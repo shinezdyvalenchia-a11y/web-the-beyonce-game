@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALCSTA48 — Masuk ke Galeri</title>
+    <link rel="icon" type="image/png" href="../icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <script src='../config.js'></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Nunito', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body {
+            background-image: url('../login/bg.png');
+            background-size: cover; background-position: center; background-attachment: fixed; background-color: #030712;
+            min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative;
+        }
+        body::before { content: ''; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 0; filter: brightness(0.5); }
+        .login-wrapper { position: relative; z-index: 1; width: 100%; max-width: 420px; padding: 20px; }
+        .login-card {
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.18); border-radius: 24px; padding: 40px 36px;
+            display: flex; flex-direction: column; align-items: center; gap: 16px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+        .login-logo { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(26,92,255,0.6); box-shadow: 0 0 20px rgba(26,92,255,0.4); }
+        .login-card h1 { font-size: 22px; font-weight: 900; color: #fff; letter-spacing: 1px; }
+        .subtitle { font-size: 13px; color: rgba(255,255,255,0.65); text-align: center; margin-top: -8px; }
+        .divider { width: 100%; height: 1px; background: rgba(255,255,255,0.1); margin: 4px 0; }
+        .input-group { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+        .input-field {
+            width: 100%; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px;
+            padding: 13px 16px; color: #fff; font-size: 14px; font-family: 'Nunito', sans-serif; outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .input-field::placeholder { color: rgba(255,255,255,0.4); }
+        .input-field:focus { border-color: rgba(26,92,255,0.7); box-shadow: 0 0 0 3px rgba(26,92,255,0.2); }
+        #loginBtn {
+            width: 100%; padding: 14px; background: linear-gradient(135deg, #1a5cff, #0088ff); border: none; border-radius: 12px;
+            color: #fff; font-size: 15px; font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer;
+            transition: opacity 0.2s ease, transform 0.15s ease; letter-spacing: 0.5px;
+        }
+        #loginBtn:hover:not(:disabled) { opacity: 0.9; transform: translateY(-1px); }
+        #loginBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .error-msg {
+            width: 100%; background: rgba(220,38,38,0.2); border: 1px solid rgba(220,38,38,0.5); border-radius: 10px;
+            padding: 10px 14px; color: #fca5a5; font-size: 13px; font-weight: 600; text-align: center; display: none;
+        }
+        .hint-text { font-size: 11.5px; color: rgba(255,255,255,0.45); text-align: center; line-height: 1.5; }
+        .hint-text span { color: rgba(100,160,255,0.8); }
+        @media screen and (max-width: 480px) { .login-card { padding: 32px 24px; } }
+    </style>
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-card">
+            <img src="../logo.png" class="login-logo" alt="ALCSTA48 Logo" onerror="this.onerror=null;this.src='../logo.png.png';">
+            <h1>ALCSTA48</h1>
+            <p class="subtitle">Masuk ke Galeri Koleksi Skin</p>
+            <div class="divider"></div>
+            <div class="input-group">
+                <input type="text" id="inputId" class="input-field" placeholder="🆔 ID Wota (contoh: WOT1A2B3C)" autocomplete="username">
+                <input type="password" id="inputPw" class="input-field" placeholder="🔑 Password" autocomplete="current-password">
+            </div>
+            <div class="error-msg" id="errorMsg"></div>
+            <button id="loginBtn" onclick="handleLogin()">Masuk</button>
+            <p class="hint-text">Belum punya akun? Kirim <span>/regis</span> ke bot <span>@alcsta48bot</span> di Telegram</p>
+        </div>
+    </div>
+    <script>
+        const BACKEND_URL = "https://shinezzzz-iddiletele.hf.space";
+        function getCookie(name) {
+            let nameEQ = name + "="; let ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) { let c = ca[i]; while (c.charAt(0) === ' ') c = c.substring(1); if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length)); }
+            return null;
+        }
+        function setCookie(name, value, days) {
+            let d = new Date(); d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = name + "=" + encodeURIComponent(value) + "; expires=" + d.toUTCString() + "; path=/; SameSite=Lax";
+        }
+        function showError(msg) { const el = document.getElementById("errorMsg"); el.textContent = msg; el.style.display = "block"; }
+        function hideError() { document.getElementById("errorMsg").style.display = "none"; }
+        async function cekSeason() {
+            const sessionCookie = getCookie("user_session");
+            if (!sessionCookie) return;
+            try {
+                const res = await fetch(BACKEND_URL + '/cekseason', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ session_cookie: sessionCookie }) });
+                if (res.ok) { const data = await res.json(); if (data && data.valid === true && data.user_id) { window.location.href = './skin/'; } }
+            } catch (e) { console.warn("Cek session gagal:", e); }
+        }
+        async function handleLogin() {
+            hideError();
+            const inputId = document.getElementById("inputId").value.trim();
+            const inputPw = document.getElementById("inputPw").value.trim();
+            if (!inputId || !inputPw) { showError("⚠️ ID Wota dan Password wajib diisi."); return; }
+            const btn = document.getElementById("loginBtn");
+            btn.disabled = true; btn.textContent = "⏳ Memproses...";
+            try {
+                const res = await fetch(BACKEND_URL + '/loginweb', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ web_id: inputId, password: inputPw }) });
+                const data = await res.json();
+                if (res.ok && data.ok === true && data.session_key) {
+                    setCookie("user_session", data.session_key, 7);
+                    btn.textContent = "✅ Berhasil! Mengalihkan...";
+                    setTimeout(() => { window.location.href = './skin/'; }, 500);
+                } else { showError("❌ " + (data.msg || "ID atau Password salah.")); btn.disabled = false; btn.textContent = "Masuk"; }
+            } catch (e) { showError("❌ Gagal menghubungi server. Periksa koneksi internet kamu."); btn.disabled = false; btn.textContent = "Masuk"; }
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+            cekSeason();
+            document.addEventListener("keydown", (e) => { if (e.key === "Enter") handleLogin(); });
+        });
+    </script>
+</body>
+</html>
