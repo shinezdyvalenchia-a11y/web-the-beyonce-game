@@ -308,8 +308,8 @@
                     if(searchQuery&&!nm.toLowerCase().includes(searchQuery)&&!code.toLowerCase().includes(searchQuery))return;
                     tot++;const io=ownedSkins.includes(code);if(io)own++;
                     const lc=io?"":"locked",fxc=io?"tier-omega-fx":"",li=io?"✨":"🔒";
-                    const ms="../../skin_jpg/"+code+".jpg";
-                    h+=`<div class="card-item ${lc} ${fxc}" onclick="setStandeeOshi('${nm}','${ms}')"><span class="card-badge badge-omega">OMEGA</span><div class="lock-indicator">${li}</div><div class="media-container"><img src="${ms}" class="card-media" loading="lazy" alt="${nm}" onerror="this.onerror=null;this.src='../../grup/icon.png'"></div><div class="card-meta"><div class="card-name">${nm}</div><div class="card-subtext">"${d.jiko}"</div><div class="card-actions"><button class="set-oshi-btn">Pajang di Standee</button></div></div></div>`;
+                    const ms="/skin_jpg/"+code+".jpg";
+                    h+=`<div class="card-item ${lc} ${fxc}" onclick="setStandeeOshi('${nm}','${ms}')"><span class="card-badge badge-omega">OMEGA</span><div class="lock-indicator">${li}</div><div class="media-container"><img src="${ms}" class="card-media" loading="lazy" alt="${nm}" onerror="this.onerror=null;this.src='/grup/icon.png'"></div><div class="card-meta"><div class="card-name">${nm}</div><div class="card-subtext">"${d.jiko}"</div><div class="card-actions"><button class="set-oshi-btn">Pajang di Standee</button></div></div></div>`;
                 });
             }
             REGULER_SKINS.forEach(fn=>{
@@ -319,7 +319,7 @@
                 if(searchQuery&&!dn.toLowerCase().includes(searchQuery)&&!fn.toLowerCase().includes(searchQuery))return;
                 tot++;const io=ownedSkins.includes(fn);if(io)own++;
                 const lc=io?"":"locked",fxc=(io&&r.name==="MYTH")?"tier-myth-fx":"",li=io?"✨":"🔒";
-                const ms=io?"../../skin/"+fn+".jpg":"../../skin/"+fn+"_grey.jpg",fb="../../skin/"+fn+".jpg";
+                const ms=io?"/skin/"+fn+".jpg":"/skin/"+fn+"_grey.jpg",fb="/skin/"+fn+".jpg";
                 h+=`<div class="card-item ${lc} ${fxc}" onclick="setStandeeOshi('${dn}','${fb}')"><span class="card-badge ${r.cls}">${r.name}</span><div class="lock-indicator">${li}</div><div class="media-container"><img src="${ms}" class="card-media" loading="lazy" alt="${dn}" onerror="this.onerror=null;this.src='${fb}';"></div><div class="card-meta"><div class="card-name">${dn}</div><div class="card-subtext">${r.name} Photocard</div><div class="card-actions"><button class="set-oshi-btn">Pajang di Standee</button></div></div></div>`;
             });
             c.innerHTML=h;
