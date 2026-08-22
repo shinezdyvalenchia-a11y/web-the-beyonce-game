@@ -313,6 +313,7 @@
                 const r=await fetch(BACKEND_URL+"/statusskin",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({session_cookie:sk,sessionCookie:sk,session_key:sk})});
                 if(r.ok){
                     const d=await r.json();
+                    window.backendTotalOwned = d.total_owned || d.total_unique || 0;
                     const rawList = d.owned_skins || d.skins || d.ownedSkins || d.data || (Array.isArray(d) ? d : []);
                     ownedSkins = rawList.map(item => String(item).trim().toUpperCase());
                 }
@@ -386,7 +387,7 @@
             });
             c.innerHTML=h;
             document.getElementById("totalCardsCount").innerText=tot;
-            document.getElementById("ownedCardsCount").innerText="Dimiliki: "+own+" / "+tot+" Photocard";
+            document.getElementById("ownedCardsCount").innerText="Dimiliki: "+own+" / "+tot+" Photocard (Total Database: "+(window.backendTotalOwned||own)+")";
         }
         window.addEventListener("DOMContentLoaded",()=>{fetchStatusSkin();});
     </script>
