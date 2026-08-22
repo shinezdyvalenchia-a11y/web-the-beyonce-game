@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALCSTA48 — Masuk ke Galeri</title>
-    <link rel="icon" type="image/png" href="../icon.png">
+    <link rel="icon" type="image/png" href="../logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -12,19 +12,100 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Nunito', sans-serif; -webkit-tap-highlight-color: transparent; }
         body {
-            background-image: url('../Passion.png');
+            background-image: url('bg.jpg');
             background-size: cover; background-position: center; background-attachment: fixed; background-color: #030712;
-            min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative;
+            min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow-x: hidden;
         }
-        body::before { content: ''; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 0; filter: brightness(0.5); }
-        .login-wrapper { position: relative; z-index: 1; width: 100%; max-width: 420px; padding: 20px; }
+        body::before { content: ''; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 0; filter: brightness(0.6); }
+        
+        /* 3D SATURN ORBIT RINGS WITH ORBITING LOGOS */
+        .logo-center-wrapper {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .logo-container {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid rgba(26, 92, 255, 0.6);
+            box-shadow: 0 0 25px rgba(26, 92, 255, 0.5);
+        }
+        .logo-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .saturn-ring-orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 320px;
+            height: 160px;
+            transform: translate3d(-50%, -50%, 0);
+            pointer-events: none;
+            z-index: 5;
+        }
+        .orbit-item {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 50px;
+            height: 50px;
+            margin-top: -25px;
+            margin-left: -25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            border-radius: 50%;
+            pointer-events: auto;
+            will-change: transform;
+            animation: saturn3DOrbit 14s linear infinite;
+        }
+        .orbit-aura {
+            position: absolute;
+            top: -10px; left: -10px; right: -10px; bottom: -10px;
+            border-radius: 50%; filter: blur(10px); opacity: 0.85; z-index: -1; pointer-events: none;
+        }
+        .orbit-item img {
+            width: 100%; height: 100%; object-fit: contain;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)); border-radius: 50%;
+        }
+        .orbit-passion { animation-delay: 0s; }
+        .orbit-passion .orbit-aura { background: radial-gradient(circle, rgba(255, 119, 0, 0.95) 0%, rgba(255, 119, 0, 0.45) 50%, transparent 100%); }
+        
+        .orbit-dream { animation-delay: -4.66s; }
+        .orbit-dream .orbit-aura { background: radial-gradient(circle, rgba(0, 168, 255, 0.95) 0%, rgba(0, 168, 255, 0.45) 50%, transparent 100%); }
+        
+        .orbit-love { animation-delay: -9.33s; }
+        .orbit-love .orbit-aura { background: radial-gradient(circle, rgba(255, 182, 193, 0.95) 0%, rgba(255, 119, 169, 0.5) 50%, transparent 100%); }
+
+        @keyframes saturn3DOrbit {
+            0% { transform: translate3d(140px, 0px, 0) scale(1.05); z-index: 18; }
+            25% { transform: translate3d(0px, 55px, 0) scale(1.22); z-index: 25; }
+            50% { transform: translate3d(-140px, 0px, 0) scale(1.05); z-index: 18; }
+            75% { transform: translate3d(0px, -55px, 0) scale(0.88); z-index: 4; }
+            100% { transform: translate3d(140px, 0px, 0) scale(1.05); z-index: 18; }
+        }
+
+        .login-wrapper { position: relative; z-index: 10; width: 100%; max-width: 420px; padding: 20px; }
         .login-card {
-            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.18); border-radius: 24px; padding: 40px 36px;
+            background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255,255,255,0.18); border-radius: 24px; padding: 36px 32px;
             display: flex; flex-direction: column; align-items: center; gap: 16px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
         }
-        .login-logo { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(26,92,255,0.6); box-shadow: 0 0 20px rgba(26,92,255,0.4); }
         .login-card h1 { font-size: 22px; font-weight: 900; color: #fff; letter-spacing: 1px; }
         .subtitle { font-size: 13px; color: rgba(255,255,255,0.65); text-align: center; margin-top: -8px; }
         .divider { width: 100%; height: 1px; background: rgba(255,255,255,0.1); margin: 4px 0; }
@@ -53,9 +134,30 @@
     </style>
 </head>
 <body>
+
+    <!-- LOGO CENTER WITH 3D ROTATING ORBITING LOGOS -->
+    <div class="logo-center-wrapper">
+        <div class="logo-container">
+            <img src="../logo.png" alt="ALCSTA48 Logo" class="logo-img">
+        </div>
+        <div class="saturn-ring-orbit">
+            <div class="orbit-item orbit-passion" title="Passion">
+                <div class="orbit-aura"></div>
+                <img src="../passion.png" alt="Passion" onerror="this.onerror=null; this.src='../logo.png';">
+            </div>
+            <div class="orbit-item orbit-dream" title="Dream">
+                <div class="orbit-aura"></div>
+                <img src="../dream.png" alt="Dream" onerror="this.onerror=null; this.src='../logo.png';">
+            </div>
+            <div class="orbit-item orbit-love" title="Love">
+                <div class="orbit-aura"></div>
+                <img src="../love.png" alt="Love" onerror="this.onerror=null; this.src='../logo.png';">
+            </div>
+        </div>
+    </div>
+
     <div class="login-wrapper">
         <div class="login-card">
-            <img src="../logo.png" class="login-logo" alt="ALCSTA48 Logo" onerror="this.onerror=null;this.src='../logo.png.png';">
             <h1>ALCSTA48</h1>
             <p class="subtitle">Masuk ke Galeri Koleksi Skin</p>
             <div class="divider"></div>

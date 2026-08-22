@@ -10,7 +10,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Nunito:wght@400;600;700;800;900&display=swap');
         * { margin:0; padding:0; box-sizing:border-box; font-family:"Nunito",sans-serif; -webkit-tap-highlight-color:transparent; }
         body {
-            background-image: url('../../Passion.png');
+            background-image: url('bg.jpg'), url('../../Passion.png');
             background-size: cover; background-position: center; background-attachment: fixed;
             background-color: #030712; color: #fff; height: 100vh; height: 100dvh;
             display: flex; flex-direction: column; overflow: hidden; position: relative;
@@ -292,9 +292,13 @@
         async function fetchStatusSkin(){
             try{
                 const sk=getCookie("user_session")||"";
-                const r=await fetch(BACKEND_URL+"/statusskin",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({session_cookie:sk,sessionCookie:sk})});
-                if(r.ok){const d=await r.json();ownedSkins=d.owned_skins||d.skins||d.ownedSkins||d.data||(Array.isArray(d)?d:[]);}
-            }catch(e){console.warn("Offline mode");}finally{renderCards();}
+                const r=await fetch(BACKEND_URL+"/statusskin",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({session_cookie:sk,sessionCookie:sk,session_key:sk})});
+                if(r.ok){
+                    const d=await r.json();
+                    const rawList = d.owned_skins || d.skins || d.ownedSkins || d.data || (Array.isArray(d) ? d : []);
+                    ownedSkins = rawList.map(item => String(item).trim().toUpperCase());
+                }
+            }catch(e){console.warn("Offline mode", e);}finally{renderCards();}
         }
         function setTierFilter(t,b){currentTier=t;document.querySelectorAll(".tier-btn").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderCards();}
         function handleSearch(){searchQuery=document.getElementById("searchInput").value.toLowerCase().trim();renderCards();}
