@@ -359,8 +359,8 @@
                     });
                     if(io)own++;
                     const lc=io?"":"locked",fxc=io?"tier-omega-fx":"",li=io?"✨":"🔒";
-                    const ms="/skin_jpg/"+code+".jpg";
-                    const vidUrl="/gacha-skin/preview_"+code+".webm";
+                    const ms="../../skin_jpg/"+code+".jpg";
+                    const vidUrl="../../gacha-skin/preview_"+code+".webm";
                     
                     // JIKA DIMILIKI (OWNED), TAMPILKAN VIDEO WEBM! JIKA TERKUNCI (LOCKED), TAMPILKAN GAMBAR JPG ABU-ABU
                     const mediaHtml = io ? 
@@ -368,7 +368,7 @@
                             <source src="${vidUrl}" type="video/webm">
                             <img src="${ms}" class="card-media" alt="${nm}">
                         </video>` : 
-                        `<img src="${ms}" class="card-media" loading="lazy" alt="${nm}" onerror="this.onerror=null;this.src='/grup/icon.png'">`;
+                        `<img src="${ms}" class="card-media" loading="lazy" alt="${nm}" onerror="this.onerror=null;this.src='../../logo.png'">`;
 
                     h+=`<div class="card-item ${lc} ${fxc}"><span class="card-badge badge-omega">OMEGA</span><div class="lock-indicator">${li}</div><div class="media-container">${mediaHtml}</div><div class="card-meta"><div class="card-name">${nm}</div><div class="card-subtext">"${d.jiko}"</div><div class="card-actions"><button class="set-oshi-btn" onclick="event.stopPropagation(); setStandeeOshi('${nm}','${code}',${io})">${io ? 'Pajang di Standee' : '🔒 Belum Dimiliki'}</button></div></div></div>`;
                 });
