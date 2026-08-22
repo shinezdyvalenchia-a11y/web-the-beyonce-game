@@ -350,7 +350,12 @@
                     const nm=d.name;
                     if(searchQuery&&!nm.toLowerCase().includes(searchQuery)&&!code.toLowerCase().includes(searchQuery))return;
                     tot++;
-                    const io=ownedSkins.some(x => x === code.toUpperCase() || x.includes(nm.toUpperCase()) || x.includes(code.toUpperCase()));
+                    // Cek kepemilikan OMEGA: cocokkan kode (DKTY, CSHN, SOLI) atau teks nama gacha (SSK: Oline, Ci Shani, Full Color)
+                    const cleanName = nm.replace(/\(Spesial\)/gi, "").trim().toUpperCase();
+                    const io=ownedSkins.some(x => {
+                        const u = x.toUpperCase();
+                        return u === code.toUpperCase() || u.includes(code.toUpperCase()) || u.includes(cleanName);
+                    });
                     if(io)own++;
                     const lc=io?"":"locked",fxc=io?"tier-omega-fx":"",li=io?"✨":"🔒";
                     const ms="/skin_jpg/"+code+".jpg";
