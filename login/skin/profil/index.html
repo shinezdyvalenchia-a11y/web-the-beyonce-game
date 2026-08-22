@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>ALCSTA48 - Profil Wota & Member Video</title>
+    <link rel="icon" type="image/png" href="../../icon.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Nunito:wght@400;600;700;800;900&family=Rajdhani:wght@600;700&display=swap');
+        * { margin:0; padding:0; box-sizing:border-box; font-family:"Nunito",sans-serif; -webkit-tap-highlight-color:transparent; }
+        body {
+            background-image: url('../../Passion.png');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            background-color: #030712; color: #fff; min-height: 100vh; min-height: 100dvh;
+            display: flex; flex-direction: column; overflow-x: hidden; position: relative;
+        }
+        body::before { content:""; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:0; pointer-events:none; }
+        .glow { position:absolute; width:50vw; height:50vw; max-width:450px; max-height:450px; border-radius:50%; opacity:0.15; pointer-events:none; }
+        .glow-tl { top:-10%; left:-10%; background:radial-gradient(circle,#ff007f 0%,transparent 70%); }
+        .glow-tr { top:-10%; right:-10%; background:radial-gradient(circle,#ffd700 0%,transparent 70%); }
+
+        .main-content { flex-grow:1; display:flex; flex-direction:column; position:relative; z-index:10; width:100%; max-width:1100px; margin:0 auto; padding-bottom:40px; }
+        .top-bar { display:flex; justify-content:space-between; align-items:center; padding:14px 24px; z-index:20; width:100%; border-bottom:1px solid rgba(255,255,255,0.08); background:rgba(11,17,33,0.75); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
+        .brand-logo { display:flex; align-items:center; gap:10px; background:rgba(15,23,42,0.8); backdrop-filter:blur(8px); padding:6px 16px; border-radius:35px; border:1px solid rgba(255,255,255,0.25); }
+        .logo-main { height:32px; width:auto; border-radius:50%; }
+        .brand-text { font-weight:800; font-size:14px; color:#fff; }
+        .nav-btn { background:rgba(15,23,42,0.7); border:1px solid rgba(255,255,255,0.2); color:#cbd5e1; padding:7px 16px; border-radius:20px; font-weight:700; font-size:12px; cursor:pointer; text-decoration:none; transition:all 0.2s ease; }
+        .nav-btn:hover { background:rgba(255,255,255,0.2); color:#fff; }
+        .logout-btn { background:rgba(220,38,38,0.2); border:1px solid rgba(220,38,38,0.4); color:#fca5a5; font-size:12px; font-weight:700; padding:7px 14px; border-radius:20px; cursor:pointer; }
+
+        /* PROFILE LAYOUT GRID */
+        .profile-container { display:grid; grid-template-columns:1fr 1fr; gap:24px; padding:24px; }
+        @media screen and (max-width:850px) { .profile-container { grid-template-columns:1fr; } }
+
+        /* VIDEO MEDIA CARD */
+        .video-card { background:rgba(11,17,33,0.85); border:1px solid rgba(255,255,255,0.18); border-radius:20px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.5); backdrop-filter:blur(15px); display:flex; flex-direction:column; }
+        .video-player-wrap { position:relative; width:100%; aspect-ratio:9/16; max-height:480px; background:#000; overflow:hidden; }
+        .video-player-wrap video { width:100%; height:100%; object-fit:cover; }
+        .video-meta-overlay { padding:16px 20px; background:linear-gradient(to top, rgba(11,17,33,0.95), rgba(11,17,33,0.7)); }
+        .wife-badge { display:inline-block; padding:4px 12px; border-radius:20px; font-size:11px; font-weight:900; background:linear-gradient(135deg,#ffd700,#ff007f); color:#fff; letter-spacing:1px; margin-bottom:6px; }
+        .wife-title { font-size:18px; font-weight:800; color:#fff; }
+        .jiko-quote { font-size:13px; font-style:italic; color:rgba(255,255,255,0.8); margin-top:4px; line-height:1.4; }
+
+        /* STATS TERMINAL CARD (MYSTAT RESPONSIVE STYLE) */
+        .stats-card { background:rgba(11,17,33,0.85); border:1px solid rgba(255,255,255,0.18); border-radius:20px; padding:24px; backdrop-filter:blur(15px); display:flex; flex-direction:column; gap:16px; box-shadow:0 10px 30px rgba(0,0,0,0.5); }
+        .stats-header { display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:12px; }
+        .stats-title { font-family:'Cinzel', serif; font-size:18px; font-weight:900; color:#ffd700; display:flex; align-items:center; gap:8px; }
+        .tag-badge { padding:3px 10px; border-radius:12px; font-size:11px; font-weight:800; background:rgba(0,212,255,0.2); border:1px solid #00d4ff; color:#00d4ff; }
+
+        /* CODE BLOCK TERMINAL DISPLAY */
+        .terminal-box { background:#030712; border:1px solid rgba(255,255,255,0.15); border-radius:14px; padding:16px; font-family:'Rajdhani', monospace; font-size:14px; color:#00ff88; line-height:1.6; overflow-x:auto; white-space:pre-wrap; word-break:break-word; }
+        .terminal-box span.key { color:#00d4ff; font-weight:700; }
+        .terminal-box span.val { color:#ffffff; }
+        .terminal-box span.highlight { color:#ffd700; font-weight:700; }
+
+        .stat-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:8px; }
+        .stat-box { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:12px; text-align:center; }
+        .stat-box .num { font-size:20px; font-weight:900; color:#ffd700; }
+        .stat-box .lbl { font-size:11px; color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:1px; margin-top:2px; }
+
+        .loading-state { text-align:center; padding:40px; font-size:14px; color:rgba(255,255,255,0.7); }
+    </style>
+</head>
+<body>
+    <div class="glow glow-tl"></div><div class="glow glow-tr"></div>
+    <main class="main-content">
+        <header class="top-bar">
+            <div class="brand-logo">
+                <img src="../../logo.png" alt="Logo" class="logo-main" onerror="this.onerror=null;this.src='../../logo.png.png'">
+                <span class="brand-text">Profil &mdash; ALCSTA48</span>
+            </div>
+            <div style="display:flex; gap:10px; align-items:center;">
+                <a href="../skin/" class="nav-btn">🃏 Galeri Skin</a>
+                <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+            </div>
+        </header>
+
+        <div id="loadingArea" class="loading-state">
+            ⏳ Memuat data statistik profil dari backend...
+        </div>
+
+        <div id="profileContent" class="profile-container" style="display:none;">
+            <!-- LEFT: MEMBER VIDEO CARD -->
+            <div class="video-card">
+                <div class="video-player-wrap">
+                    <video id="memberVideo" autoplay loop muted playsinline poster="../../Passion.png">
+                        <source id="videoSource" src="https://files.catbox.moe/opu7bm.mp4" type="video/mp4">
+                        Browser tidak mendukung pemutaran video.
+                    </video>
+                </div>
+                <div class="video-meta-overlay">
+                    <span class="wife-badge" id="wifeBadge">COMMON MEMBER</span>
+                    <div class="wife-title" id="wifeTitle">-</div>
+                    <div class="jiko-quote" id="jikoQuote">-</div>
+                </div>
+            </div>
+
+            <!-- RIGHT: /mystat TERMINAL DATA CARD -->
+            <div class="stats-card">
+                <div class="stats-header">
+                    <div class="stats-title">📊 STATISTIK USER</div>
+                    <span class="tag-badge" id="tagStatus">MEMBER</span>
+                </div>
+
+                <!-- TERMINAL CODE BOX PERSIS SEPERTI /mystat TELEGRAM -->
+                <div class="terminal-box" id="mystatTerminal">
+                    <!-- Dynamic Python/Bash Json Terminal Output -->
+                </div>
+
+                <div class="stat-grid">
+                    <div class="stat-box">
+                        <div class="num" id="statRank">#999</div>
+                        <div class="lbl">Peringkat</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="num" id="statLevel">Lv. 1</div>
+                        <div class="lbl">Level Chat</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="num" id="statMessages">0</div>
+                        <div class="lbl">Total Pesan</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="num" id="stat7Days">0</div>
+                        <div class="lbl">Pesan 7 Hari</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const BACKEND_URL = "https://shinezzzz-iddiletele.hf.space";
+
+        function getCookie(name) {
+            let nameEQ = name + "="; 
+            let ca = document.cookie.split(';');
+            for(let i=0; i < ca.length; i++) {
+                let c = ca[i]; 
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return decodeURIComponent(c.substring(nameEQ.length));
+            } 
+            return null;
+        }
+
+        function logout() {
+            document.cookie = 'user_session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            window.location.href = "../";
+        }
+
+        async function fetchMyStat() {
+            const sk = getCookie("user_session");
+            if (!sk) {
+                window.location.href = "../";
+                return;
+            }
+
+            try {
+                const res = await fetch(BACKEND_URL + "/mystat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ session_cookie: sk })
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.ok) {
+                        renderProfile(data);
+                    } else {
+                        alert("Gagal memuat profil: " + data.msg);
+                    }
+                } else {
+                    alert("Sesi login kadaluwarsa. Silakan login ulang.");
+                    logout();
+                }
+            } catch (e) {
+                console.error("Error fetching mystat:", e);
+                document.getElementById("loadingArea").innerText = "❌ Gagal terhubung ke server backend.";
+            }
+        }
+
+        function renderProfile(data) {
+            document.getElementById("loadingArea").style.display = "none";
+            document.getElementById("profileContent").style.display = "grid";
+
+            // 1. Set Video Member & Wife Meta
+            const vSource = document.getElementById("videoSource");
+            const vElem = document.getElementById("memberVideo");
+            if (data.video_url) {
+                vSource.src = data.video_url;
+                vElem.load();
+                vElem.play().catch(e => console.log("Autoplay blocked:", e));
+            }
+
+            document.getElementById("wifeBadge").innerText = (data.tier_tertinggi || "COMMON") + " MEMBER";
+            document.getElementById("wifeTitle").innerText = data.wife && data.wife !== "-" ? data.wife : "Belum punya Oshi Wife";
+            document.getElementById("jikoQuote").innerText = data.jiko && data.jiko !== "-" ? `"${data.jiko}"` : "Ayo gacha di Telegram untuk mendapatkan kartu Oshi!";
+
+            // 2. Set Stat Summary Box
+            document.getElementById("tagStatus").innerText = data.status || "Wota";
+            document.getElementById("statRank").innerText = "#" + (data.rank || "999");
+            document.getElementById("statLevel").innerText = "Lv. " + (data.level || "1");
+            document.getElementById("statMessages").innerText = data.total_pesan || "0";
+            document.getElementById("stat7Days").innerText = data.pesan_7_hari || "0";
+
+            // 3. Render Terminal Output Persis Telegram Response (/mystat)
+            const terminal = document.getElementById("mystatTerminal");
+            terminal.innerHTML = 
+`<span class="key"># Nama        :</span> <span class="highlight">${data.nama}</span>
+<span class="key"># Username    :</span> <span class="val">${data.username}</span>
+<span class="key"># Peringkat   :</span> <span class="highlight">#${data.rank}</span>
+<span class="key"># Total Pesan :</span> <span class="val">${data.total_pesan}</span>
+<span class="key"># Pesan 7-Hari:</span> <span class="val">${data.pesan_7_hari}</span>
+<span class="key"># Level Chat  :</span> <span class="highlight">${data.level}</span>
+<span class="key"># Status Tag  :</span> <span class="val">${data.status}</span>
+<span class="key"># Oshi User   :</span> <span class="val">${data.oshi}</span>
+<span class="key"># Tim User    :</span> <span class="val">${data.tim}</span>
+<span class="key"># Wife Gacha  :</span> <span class="highlight">${data.wife}</span>
+<span class="key"># Tier Card   :</span> <span class="val">${data.cc}</span>`;
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchMyStat();
+        });
+    </script>
+</body>
+</html>
