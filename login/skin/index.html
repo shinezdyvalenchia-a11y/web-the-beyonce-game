@@ -76,7 +76,25 @@
         .card-actions { margin-top:6px; display:flex; gap:6px; }
         .set-oshi-btn { background:linear-gradient(135deg,#1a5cff,#00d4ff); border:none; border-radius:8px; color:#fff; font-size:10px; font-weight:800; padding:5px 8px; cursor:pointer; width:100%; transition:opacity 0.2s; font-family:"Nunito",sans-serif; }
         .set-oshi-btn:hover { opacity:0.9; }
-        @media screen and (max-width:768px) { .top-bar{padding:10px 14px;} .sub-nav-container{padding:8px 14px;} .stage-container{padding:12px 14px 20px 14px;} .card-grid{grid-template-columns:repeat(2,1fr);gap:10px;} .media-container{height:160px;} .search-box-wrap{width:130px;} }
+        @media screen and (max-width:768px) { 
+            .top-bar { padding:8px 12px; gap:8px; flex-wrap:wrap; } 
+            .left-group { width:100%; justify-content:space-between; } 
+            .right-group { width:100%; justify-content:space-between; gap:6px; } 
+            .brand-text { font-size:14px; } 
+            .search-box-wrap { flex-grow:1; width:auto; } 
+            .sub-nav-container { padding:6px 12px; gap:6px; overflow-x:auto; } 
+            .tier-btn { padding:5px 10px; font-size:11px; white-space:nowrap; } 
+            .stage-container { padding:10px 12px 20px 12px; } 
+            .card-grid { grid-template-columns:repeat(2,1fr); gap:8px; } 
+            .media-container { height:140px; } 
+            .card-name { font-size:11px; } 
+            .card-subtext { font-size:9.5px; } 
+            .set-oshi-btn { font-size:9px; padding:4px 6px; } 
+        }
+        @media screen and (max-width:400px) { 
+            .card-grid { grid-template-columns:repeat(2,1fr); gap:6px; } 
+            .media-container { height:125px; } 
+        }
     </style>
 </head>
 <body>
@@ -302,7 +320,28 @@
         }
         function setTierFilter(t,b){currentTier=t;document.querySelectorAll(".tier-btn").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderCards();}
         function handleSearch(){searchQuery=document.getElementById("searchInput").value.toLowerCase().trim();renderCards();}
-        function setStandeeOshi(n,i){localStorage.setItem("user_standee_hero",i);localStorage.setItem("user_custom_oshi",n);alert("Berhasil dipajang: "+n);}
+        async function setStandeeOshi(n, code, isOwned){
+            if(!isOwned){
+                alert("⚠️ Kamu belum memiliki skin " + n + ". Dapatkan dari gacha bot Telegram terlebih dahulu!");
+                return;
+            }
+            const sk = getCookie("user_session") || "";
+            try {
+                const r = await fetch(BACKEND_URL + "/setstandee", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ session_cookie: sk, skin_code: code })
+                });
+                const d = await r.json();
+                if(r.ok && d.ok){
+                    alert("✨ Berhasil memajang " + n + " di Standee Profil (/mystat)!");
+                } else {
+                    alert("⚠️ " + (d.msg || "Gagal memasang Standee"));
+                }
+            } catch(e) {
+                alert("❌ Gagal terhubung ke backend server.");
+            }
+        }
         function renderCards(){
             const c=document.getElementById("cardContainer");c.innerHTML="";
             let h="",tot=0,own=0;
@@ -310,10 +349,10 @@
                 Object.entries(OMEGA_DATA).forEach(([code,d])=>{
                     const nm=d.name;
                     if(searchQuery&&!nm.toLowerCase().includes(searchQuery)&&!code.toLowerCase().includes(searchQuery))return;
-                    tot++;const io=ownedSkins.includes(code);if(io)own++;
+                    tot++;const io=ownedSkins.includes(code.toUpperCase());if(io)own++;
                     const lc=io?"":"locked",fxc=io?"tier-omega-fx":"",li=io?"✨":"🔒";
                     const ms="/skin_jpg/"+code+".jpg";
-                    h+=`<div class="card-item ${lc} ${fxc}" onclick="setStandeeOshi('${nm}','${ms}')"><span class="card-badge badge-omega">OMEGA</span><div class="lock-indicator">${li}</div><div class="media-container"><img src="${ms}" class="card-media" loading="lazy" alt="${nm}" onerror="this.onerror=null;this.src='/grup/icon.png'"></div><div class="card-meta"><div class="card-name">${nm}</div><div class="card-subtext">"${d.jiko}"</div><div class="card-actions"><button class="set-oshi-btn">Pajang di Standee</button></div></div></div>`;
+                    h+=`<div class="card-item ${lc} ${fxc}"><span class="card-badge badge-omega">OMEGA</span><div class="lock-indicator">${li}</div><div class="media-container"><img src="${ms}" class="card-media" loading="lazy" alt="${nm}" onerror="this.onerror=null;this.src='/grup/icon.png'"></div><div class="card-meta"><div class="card-name">${nm}</div><div class="card-subtext">"${d.jiko}"</div><div class="card-actions"><button class="set-oshi-btn" onclick="event.stopPropagation(); setStandeeOshi('${nm}','${code}',${io})">${io ? 'Pajang di Standee' : '🔒 Belum Dimiliki'}</button></div></div></div>`;
                 });
             }
             REGULER_SKINS.forEach(fn=>{
@@ -321,10 +360,10 @@
                 if(currentTier!=="ALL"&&currentTier!==r.name)return;
                 const dn=formatName(fn);
                 if(searchQuery&&!dn.toLowerCase().includes(searchQuery)&&!fn.toLowerCase().includes(searchQuery))return;
-                tot++;const io=ownedSkins.includes(fn);if(io)own++;
+                tot++;const io=ownedSkins.includes(fn.toUpperCase());if(io)own++;
                 const lc=io?"":"locked",fxc=(io&&r.name==="MYTH")?"tier-myth-fx":"",li=io?"✨":"🔒";
                 const ms=io?"/skin/"+fn+".jpg":"/skin/"+fn+"_grey.jpg",fb="/skin/"+fn+".jpg";
-                h+=`<div class="card-item ${lc} ${fxc}" onclick="setStandeeOshi('${dn}','${fb}')"><span class="card-badge ${r.cls}">${r.name}</span><div class="lock-indicator">${li}</div><div class="media-container"><img src="${ms}" class="card-media" loading="lazy" alt="${dn}" onerror="this.onerror=null;this.src='${fb}';"></div><div class="card-meta"><div class="card-name">${dn}</div><div class="card-subtext">${r.name} Photocard</div><div class="card-actions"><button class="set-oshi-btn">Pajang di Standee</button></div></div></div>`;
+                h+=`<div class="card-item ${lc} ${fxc}"><span class="card-badge ${r.cls}">${r.name}</span><div class="lock-indicator">${li}</div><div class="media-container"><img src="${ms}" class="card-media" loading="lazy" alt="${dn}" onerror="this.onerror=null;this.src='${fb}';"></div><div class="card-meta"><div class="card-name">${dn}</div><div class="card-subtext">${r.name} Photocard</div><div class="card-actions"><button class="set-oshi-btn" onclick="event.stopPropagation(); setStandeeOshi('${dn}','${fn}',${io})">${io ? 'Pajang di Standee' : '🔒 Belum Dimiliki'}</button></div></div></div>`;
             });
             c.innerHTML=h;
             document.getElementById("totalCardsCount").innerText=tot;

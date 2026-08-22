@@ -30,8 +30,6 @@
 
         /* PROFILE LAYOUT GRID */
         .profile-container { display:grid; grid-template-columns:1fr 1fr; gap:24px; padding:24px; }
-        @media screen and (max-width:850px) { .profile-container { grid-template-columns:1fr; } }
-
         /* VIDEO MEDIA CARD */
         .video-card { background:rgba(11,17,33,0.85); border:1px solid rgba(255,255,255,0.18); border-radius:20px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.5); backdrop-filter:blur(15px); display:flex; flex-direction:column; }
         .video-player-wrap { position:relative; width:100%; aspect-ratio:9/16; max-height:480px; background:#000; overflow:hidden; }
@@ -58,6 +56,19 @@
         .stat-box .num { font-size:20px; font-weight:900; color:#ffd700; }
         .stat-box .lbl { font-size:11px; color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:1px; margin-top:2px; }
 
+        @media screen and (max-width:768px) {
+            .top-bar { padding:10px 14px; }
+            .brand-text { font-size:12px; }
+            .profile-container { grid-template-columns:1fr; gap:16px; padding:12px; }
+            .video-player-wrap { max-height:360px; }
+            .video-meta-overlay { padding:12px 16px; }
+            .wife-title { font-size:16px; }
+            .stats-card { padding:16px; gap:12px; }
+            .terminal-box { font-size:12.5px; padding:12px; }
+            .stat-grid { gap:8px; }
+            .stat-box { padding:8px; }
+            .stat-box .num { font-size:16px; }
+        }
         .loading-state { text-align:center; padding:40px; font-size:14px; color:rgba(255,255,255,0.7); }
     </style>
 </head>
