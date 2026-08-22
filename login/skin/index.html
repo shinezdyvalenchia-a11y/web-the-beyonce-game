@@ -109,9 +109,25 @@
     </main>
     <script>
         const BACKEND_URL = "https://shinezzzz-iddiletele.hf.space";
-        function getCookie(n){let e=n+"=",a=document.cookie.split(";");for(let i=0;i<a.length;i++){let c=a[i];while(c.charAt(0)===" ")c=c.substring(1);if(c.indexOf(e)===0)return decodeURIComponent(c.substring(e.length));}return null;}
-        function deleteCookie(n){document.cookie=n+"=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";}
-        function handleLogout(){deleteCookie("user_session");window.location.href="../";}
+        function getCookie(name) {
+            let nameEQ = name + "="; 
+            let ca = document.cookie.split(';');
+            for(let i=0; i < ca.length; i++) {
+                let c = ca[i]; 
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return decodeURIComponent(c.substring(nameEQ.length));
+            } 
+            return null;
+        }
+
+        function deleteCookie(name) {
+            document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        }
+
+        function logout() {
+            deleteCookie("user_session");
+            window.location.href = "../";
+        }
         (function(){if(!getCookie("user_session")){window.location.href="../";}})();
         const OMEGA_DATA={
             "DKTY":{name:"Dedek Kitty (Spesial)",jiko:"Peduli dan berbaik hati, siapakah dia? Christy!"},
@@ -290,9 +306,9 @@
                     const nm=d.name;
                     if(searchQuery&&!nm.toLowerCase().includes(searchQuery)&&!code.toLowerCase().includes(searchQuery))return;
                     tot++;const io=ownedSkins.includes(code);if(io)own++;
-                    const lc=io?"":"locked",fxc=io?"tier-omega-fx":"",li=io?"&#10024;":"&#x1F512;";
+                    const lc=io?"":"locked",fxc=io?"tier-omega-fx":"",li=io?"✨":"🔒";
                     const ms="../../skin_jpg/"+code+".jpg";
-                    h+=<div class="card-item  " onclick="setStandeeOshi('','')"><span class="card-badge badge-omega">OMEGA</span><div class="lock-indicator"></div><div class="media-container"><img src="" class="card-media" loading="lazy" alt="" onerror="this.onerror=null;this.src='../../grup/icon.png'"></div><div class="card-meta"><div class="card-name"></div><div class="card-subtext">""</div><div class="card-actions"><button class="set-oshi-btn">Pajang di Standee</button></div></div></div>;
+                    h+=`<div class="card-item ${lc} ${fxc}" onclick="setStandeeOshi('${nm}','${ms}')"><span class="card-badge badge-omega">OMEGA</span><div class="lock-indicator">${li}</div><div class="media-container"><img src="${ms}" class="card-media" loading="lazy" alt="${nm}" onerror="this.onerror=null;this.src='../../grup/icon.png'"></div><div class="card-meta"><div class="card-name">${nm}</div><div class="card-subtext">"${d.jiko}"</div><div class="card-actions"><button class="set-oshi-btn">Pajang di Standee</button></div></div></div>`;
                 });
             }
             REGULER_SKINS.forEach(fn=>{
@@ -301,9 +317,9 @@
                 const dn=formatName(fn);
                 if(searchQuery&&!dn.toLowerCase().includes(searchQuery)&&!fn.toLowerCase().includes(searchQuery))return;
                 tot++;const io=ownedSkins.includes(fn);if(io)own++;
-                const lc=io?"":"locked",fxc=(io&&r.name==="MYTH")?"tier-myth-fx":"",li=io?"&#10024;":"&#x1F512;";
+                const lc=io?"":"locked",fxc=(io&&r.name==="MYTH")?"tier-myth-fx":"",li=io?"✨":"🔒";
                 const ms=io?"../../skin/"+fn+".jpg":"../../skin/"+fn+"_grey.jpg",fb="../../skin/"+fn+".jpg";
-                h+=<div class="card-item  " onclick="setStandeeOshi('','')"><span class="card-badge "></span><div class="lock-indicator"></div><div class="media-container"><img src="" class="card-media" loading="lazy" alt="" onerror="this.onerror=null;this.src=''"></div><div class="card-meta"><div class="card-name"></div><div class="card-subtext"> Photocard</div><div class="card-actions"><button class="set-oshi-btn">Pajang di Standee</button></div></div></div>;
+                h+=`<div class="card-item ${lc} ${fxc}" onclick="setStandeeOshi('${dn}','${fb}')"><span class="card-badge ${r.cls}">${r.name}</span><div class="lock-indicator">${li}</div><div class="media-container"><img src="${ms}" class="card-media" loading="lazy" alt="${dn}" onerror="this.onerror=null;this.src='${fb}';"></div><div class="card-meta"><div class="card-name">${dn}</div><div class="card-subtext">${r.name} Photocard</div><div class="card-actions"><button class="set-oshi-btn">Pajang di Standee</button></div></div></div>`;
             });
             c.innerHTML=h;
             document.getElementById("totalCardsCount").innerText=tot;
