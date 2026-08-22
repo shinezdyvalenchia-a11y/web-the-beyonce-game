@@ -30,7 +30,7 @@
             color: #ffffff;
         }
 
-        /* DYNAMIC STARRY BACKGROUND (PARALLAX PIXEL CANVAS) */
+        /* DYNAMIC MOVING STARS CANVAS */
         #starCanvas {
             position: absolute;
             top: 0;
@@ -41,7 +41,7 @@
             pointer-events: none;
         }
 
-        /* CONTAINER FOR TITLE & RELEASE TEXT */
+        /* CONTENT CONTAINER */
         .content-container {
             position: relative;
             z-index: 10;
@@ -54,52 +54,29 @@
             gap: 16px;
         }
 
-        /* LOGO / BADGE OPTIONAL DECORATION */
-        .game-badge {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            background: rgba(15, 23, 42, 0.7);
-            border: 2px solid rgba(255, 215, 0, 0.5);
-            box-shadow: 0 0 35px rgba(255, 215, 0, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 42px;
-            margin-bottom: 8px;
-            animation: pulseGlow 3s ease-in-out infinite alternate;
-        }
-
-        @keyframes pulseGlow {
-            from { box-shadow: 0 0 25px rgba(255, 215, 0, 0.25); transform: scale(1); }
-            to { box-shadow: 0 0 45px rgba(255, 0, 127, 0.5); transform: scale(1.05); }
-        }
-
-        /* TITLE 1: "The Beyonce Game Has Come" */
+        /* TITLE 1: "The Beyonce Game Has Come" (WHITE GLOWING FONT) */
         .title-main {
             font-family: 'Cinzel', serif;
-            font-size: clamp(28px, 5vw, 54px);
+            font-size: clamp(28px, 5vw, 56px);
             font-weight: 900;
             letter-spacing: 2px;
-            background: linear-gradient(135deg, #ffffff 0%, #ffd700 50%, #ff007f 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+            color: #ffffff;
+            text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff, 0 0 35px rgba(255, 255, 255, 0.8), 0 0 50px rgba(255, 255, 255, 0.5);
             opacity: 0;
             transform: translateY(20px) scale(0.95);
             animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             animation-delay: 0.2s;
         }
 
-        /* TITLE 2: "release on 20 desember" (appears 2s later) */
+        /* TITLE 2: "release on 20 desember" (WHITE GLOWING FONT - APPEARS IN 2s) */
         .release-text {
             font-family: 'Rajdhani', sans-serif;
             font-size: clamp(18px, 3.5vw, 32px);
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 6px;
-            color: #00d4ff;
-            text-shadow: 0 0 20px rgba(0, 212, 255, 0.7);
+            color: #ffffff;
+            text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff, 0 0 30px rgba(255, 255, 255, 0.8);
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
@@ -116,36 +93,6 @@
                 transform: translateY(0) scale(1);
             }
         }
-
-        /* NAVIGATION BUTTON TO LOGIN (OPTIONAL / AUTO DISCLOSURE) */
-        .enter-btn {
-            margin-top: 24px;
-            padding: 12px 32px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 30px;
-            color: #fff;
-            font-size: 14px;
-            font-weight: 700;
-            text-decoration: none;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .enter-btn.visible {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .enter-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-            border-color: #ffd700;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
-            transform: translateY(-2px);
-        }
     </style>
 </head>
 <body>
@@ -153,17 +100,15 @@
     <!-- DYNAMIC MOVING STARS CANVAS -->
     <canvas id="starCanvas"></canvas>
 
-    <!-- CONTENT -->
+    <!-- CONTENT (NO LOGO & NO LOGIN BUTTON) -->
     <div class="content-container">
-        <div class="game-badge">👑</div>
         <h1 class="title-main">The Beyonce Game Has Come</h1>
         <div class="release-text" id="releaseText">release on 20 desember</div>
-        <a href="./login/" class="enter-btn" id="enterBtn">MASUK KE LOGIN WEB ➔</a>
     </div>
 
     <script>
         // ====================================================
-        // DYNAMIC MOVING STARFIELD ANIMATION (CANVAS ACCELERATED)
+        // DYNAMIC MOVING STARFIELD ANIMATION
         // ====================================================
         const canvas = document.getElementById('starCanvas');
         const ctx = canvas.getContext('2d');
@@ -202,7 +147,7 @@
             for (let i = 0; i < stars.length; i++) {
                 const s = stars[i];
 
-                // Move stars vertically (drifting upwards/downwards)
+                // Move stars vertically
                 s.y -= s.speedY;
                 s.x += s.speedX;
 
@@ -238,13 +183,11 @@
         drawStars();
 
         // ====================================================
-        // TIMING: 2 DETIK KEMUDIAN MUNCIUL "release on 20 desember"
+        // TIMING: 2 DETIK KEMUDIAN MUNCUL "release on 20 desember"
         // ====================================================
         setTimeout(() => {
             const releaseEl = document.getElementById('releaseText');
-            const enterBtn = document.getElementById('enterBtn');
             if (releaseEl) releaseEl.classList.add('visible');
-            if (enterBtn) enterBtn.classList.add('visible');
         }, 2000); // 2000 ms = 2 Detik
     </script>
 </body>
