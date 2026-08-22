@@ -199,6 +199,11 @@
             const vElem = document.getElementById("memberVideo");
             if (data.video_url) {
                 vSource.src = data.video_url;
+                if (data.video_url.endsWith(".webm")) {
+                    vSource.type = "video/webm";
+                } else {
+                    vSource.type = "video/mp4";
+                }
                 vElem.load();
                 vElem.play().catch(e => console.log("Autoplay blocked:", e));
             }
